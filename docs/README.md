@@ -7,6 +7,12 @@ Welcome to the comprehensive documentation for the Flux competitive programming 
 ```
 docs/
 ├── README.md                           # This file - Documentation index
+├── api/                               # API & Backend Integration
+│   ├── README.md                      # API overview & quick start
+│   ├── CORS_SETUP.md                  # CORS configuration guide
+│   ├── ENVIRONMENT.md                 # Environment variables guide
+│   ├── ERROR_HANDLING.md              # Error handling best practices
+│   └── SECURITY.md                    # Security best practices
 ├── architecture/                       # System architecture & design
 │   ├── FRONTEND_GUIDE.md              # Complete API reference & specifications
 │   └── system-overview.md             # High-level system architecture
@@ -28,12 +34,21 @@ Start here to get up and running:
 1. [Quick Start Guide](./guides/QUICK_START.md) - Get the app running in minutes
 2. [Setup Summary](./guides/SETUP_SUMMARY.md) - Understand what's been configured
 3. [System Overview](./architecture/system-overview.md) - Learn the architecture
+4. **[API Integration Guide](./api/README.md) - Connect to backend**
 
 ### For Frontend Developers
 Essential resources for building features:
 1. [Frontend API Guide](./architecture/FRONTEND_GUIDE.md) - Complete API reference
 2. [Routing Guide](./guides/ROUTING_GUIDE.md) - How to add new pages
 3. [Dark Theme Guide](./features/DARK_THEME_GUIDE.md) - Styling guidelines
+4. **[Error Handling](./api/ERROR_HANDLING.md) - Handle errors properly**
+
+### For Backend Integration
+Connect frontend to backend:
+1. **[API Quick Start](./api/README.md) - Get started with API integration**
+2. **[CORS Setup](./api/CORS_SETUP.md) - Configure CORS correctly**
+3. **[Environment Variables](./api/ENVIRONMENT.md) - Configure your environment**
+4. **[Security Practices](./api/SECURITY.md) - Secure your application**
 
 ### For Understanding Workflows
 Learn how the platform works:
@@ -41,6 +56,35 @@ Learn how the platform works:
 2. [Contest Lifecycle](./workflows/contest-lifecycle.md) - Contest creation to completion
 
 ## 📖 Documentation Categories
+
+### 🌐 API & Backend Integration (NEW!)
+Complete guide for connecting frontend to backend.
+
+- **[API Overview](./api/README.md)**
+  - Quick start guide
+  - Usage examples
+  - Authentication flow
+  - API response formats
+  
+- **[CORS Configuration](./api/CORS_SETUP.md)**
+  - Backend setup (FastAPI, Express, Django)
+  - Testing CORS
+  - Troubleshooting common issues
+  
+- **[Environment Variables](./api/ENVIRONMENT.md)**
+  - Available variables
+  - Development vs production
+  - Deployment configuration
+  
+- **[Error Handling](./api/ERROR_HANDLING.md)**
+  - Error types and handling
+  - User-friendly messages
+  - Error logging
+  
+- **[Security Best Practices](./api/SECURITY.md)**
+  - Implemented security features
+  - Frontend security guidelines
+  - Security audit checklist
 
 ### 🏗️ Architecture
 Technical architecture and system design documentation.
