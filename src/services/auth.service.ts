@@ -4,7 +4,7 @@
  */
 
 import { api, COOKIE_NAMES } from '../config/axios'
-import { API_ENDPOINTS, config } from '../config/env'
+import { API_ENDPOINTS } from '../config/env'
 import { Cookies } from 'react-cookie'
 import type { LoginRequest, SignupRequest, AuthResponse, User, ApiResponse } from '../types/api.types'
 

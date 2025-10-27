@@ -1,4 +1,4 @@
-import { FaTrophy, FaCode, FaChartLine, FaBolt } from 'react-icons/fa'
+import { FaBolt } from 'react-icons/fa'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
