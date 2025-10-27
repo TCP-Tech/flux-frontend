@@ -4,7 +4,6 @@
  */
 
 import { useState, useEffect, useCallback } from 'react'
-import type { AxiosError } from 'axios'
 import { getErrorMessage } from '../config/axios'
 
 /**

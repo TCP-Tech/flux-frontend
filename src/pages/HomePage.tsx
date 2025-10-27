@@ -1,4 +1,4 @@
-import { FaArrowRight, FaTrophy, FaCode, FaChartLine, FaBolt } from 'react-icons/fa'
+import { FaBolt } from 'react-icons/fa'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
@@ -52,35 +52,6 @@ function HomePage() {
             excellence
           </p>
 
-          {/* Main Action Buttons */}
-          <div className="mb-4 mt-12 p-4 flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up animation-delay-1000">
-            <a href="/contests" className="group">
-              <button className="relative inline-flex h-14 items-center justify-center rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 px-8 font-semibold text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-neutral-950 hover:shadow-2xl hover:shadow-primary-500/50 hover:scale-105 overflow-hidden">
-                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-primary-400 to-primary-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <span className="relative flex items-center gap-2">
-                  <FaTrophy size={18} />
-                  Browse Contests
-                  <FaArrowRight
-                    className="group-hover:translate-x-1 transition-transform"
-                    size={14}
-                  />
-                </span>
-              </button>
-            </a>
-            <a href="/problems" className="group">
-              <button className="relative inline-flex h-14 items-center justify-center rounded-xl border-2 border-neutral-700 bg-neutral-900/50 backdrop-blur-sm px-8 font-semibold text-neutral-200 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-neutral-950 hover:bg-neutral-800/80 hover:border-neutral-600 hover:text-white hover:shadow-xl hover:scale-105">
-                <span className="relative flex items-center gap-2">
-                  <FaCode size={18} />
-                  Solve Problems
-                  <FaArrowRight
-                    className="group-hover:translate-x-1 transition-transform"
-                    size={14}
-                  />
-                </span>
-              </button>
-            </a>
-          </div>
-
           {/* Stats Bar */}
           <div className="mt-16 flex flex-wrap justify-center gap-8 px-4 animate-fade-in-up animation-delay-1200">
             <div className="text-center">
@@ -99,48 +70,13 @@ function HomePage() {
             </div>
           </div>
 
-          {/* Feature Highlights */}
-          <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto px-4 mb-8">
-            <div className="group relative p-8 rounded-2xl border border-neutral-800 bg-gradient-to-br from-neutral-900/90 to-neutral-900/50 backdrop-blur-sm hover:border-neutral-700 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary-500/10 animate-fade-in-up animation-delay-1400">
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="relative">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center mb-4 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-primary-500/50">
-                  <FaTrophy className="text-2xl text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-neutral-200 mb-3">Competitive Contests</h3>
-                <p className="text-sm text-neutral-400 leading-relaxed">
-                  Participate in timed contests and multi-round tournaments. Test your skills
-                  against the best.
-                </p>
-              </div>
-            </div>
-
-            <div className="group relative p-8 rounded-2xl border border-neutral-800 bg-gradient-to-br from-neutral-900/90 to-neutral-900/50 backdrop-blur-sm hover:border-neutral-700 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-secondary-500/10 animate-fade-in-up animation-delay-1600">
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-secondary-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="relative">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-secondary-500 to-secondary-600 flex items-center justify-center mb-4 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-secondary-500/50">
-                  <FaCode className="text-2xl text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-neutral-200 mb-3">Premium Problems</h3>
-                <p className="text-sm text-neutral-400 leading-relaxed">
-                  Access curated competitive programming challenges across all difficulty levels.
-                </p>
-              </div>
-            </div>
-
-            <div className="group relative p-8 rounded-2xl border border-neutral-800 bg-gradient-to-br from-neutral-900/90 to-neutral-900/50 backdrop-blur-sm hover:border-neutral-700 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-accent-500/10 animate-fade-in-up animation-delay-1800">
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-accent-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="relative">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-accent-500 to-accent-600 flex items-center justify-center mb-4 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-accent-500/50">
-                  <FaChartLine className="text-2xl text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-neutral-200 mb-3">Global Leaderboards</h3>
-                <p className="text-sm text-neutral-400 leading-relaxed">
-                  Track your progress, climb the ranks, and compete with programmers worldwide.
-                </p>
-              </div>
+          {/* Vacant Space */}
+          <div className="mt-24 h-32 flex items-center justify-center">
+            <div className="w-full max-w-4xl mx-auto px-4">
+              {/* This space is intentionally left vacant for future content */}
             </div>
           </div>
+
         </div>
       </div>
 

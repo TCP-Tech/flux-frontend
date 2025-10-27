@@ -11,13 +11,14 @@ import type {
   Submission,
   PaginatedResponse,
   QueryParams,
+  ApiResponse,
 } from '../types/api.types'
 
 export const problemService = {
   /**
    * Get all problems with pagination and filters
    */
-  getProblems: async (params?: QueryParams): Promise<PaginatedResponse<Problem>> => {
+  getProblems: async (params?: QueryParams): Promise<ApiResponse<PaginatedResponse<Problem>>> => {
     return await api.get<PaginatedResponse<Problem>>(API_ENDPOINTS.PROBLEMS.BASE, {
       params,
     })
@@ -26,20 +27,18 @@ export const problemService = {
   /**
    * Get problem by ID
    */
-  getProblemById: async (id: string): Promise<Problem> => {
-    const response = await api.get<Problem>(API_ENDPOINTS.PROBLEMS.DETAIL(id))
-    return response.data
+  getProblemById: async (id: string): Promise<ApiResponse<Problem>> => {
+    return await api.get<Problem>(API_ENDPOINTS.PROBLEMS.DETAIL(id))
   },
 
   /**
    * Submit solution for a problem
    */
-  submitSolution: async (submission: SubmitProblemRequest): Promise<Submission> => {
-    const response = await api.post<Submission>(
+  submitSolution: async (submission: SubmitProblemRequest): Promise<ApiResponse<Submission>> => {
+    return await api.post<Submission>(
       API_ENDPOINTS.PROBLEMS.SUBMIT(submission.problemId),
       submission
     )
-    return response.data
   },
 
   /**
