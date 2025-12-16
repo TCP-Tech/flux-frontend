@@ -98,17 +98,10 @@ apiClient.interceptors.response.use(
     // Handle 401 Unauthorized - Session expired
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true
-
-      // Backend doesn't have refresh endpoint, redirect to login
-      if (isDevelopment()) {
-        console.log('[API] Session expired, redirecting to login')
-      }
       
-      // Clear cookies
+      localStorage.removeItem('flux_is_authenticated')
       cookies.remove(COOKIE_NAMES.ACCESS_TOKEN, { path: '/' })
-      cookies.remove(COOKIE_NAMES.REFRESH_TOKEN, { path: '/' })
 
-      // Redirect to login page
       window.location.href = '/login'
       return Promise.reject(error)
     }
@@ -178,15 +171,14 @@ export const getErrorMessage = (error: unknown): string => {
  */
 export async function apiRequest<T>(
   config: AxiosRequestConfig
-): Promise<ApiResponse<T>> {
+): Promise<T> {
   try {
-    const response = await apiClient.request<ApiResponse<T>>(config)
+    const response = await apiClient.request<T>(config)
     return response.data
   } catch (error) {
     throw error
   }
 }
-
 /**
  * Export a clean API interface
  */

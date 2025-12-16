@@ -14,6 +14,13 @@ export default defineConfig({
     port: 3000,
     open: true,
     host: true,
+    proxy: {
+      '/v1': {
+        target: 'http://localhost:8080', 
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
   build: {
     // Production optimizations
