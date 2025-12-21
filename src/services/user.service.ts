@@ -42,7 +42,6 @@ export const userService = {
         },
       }
     )
-    // Fix: api.post already returns the data payload
     return response
   },
 

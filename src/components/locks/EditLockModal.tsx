@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { FaTimes, FaCopy, FaCheck, FaLock, FaClock, FaUserCircle, FaFingerprint } from 'react-icons/fa'
+import { FaTimes, FaCopy, FaExclamationTriangle, FaCheck, FaLock, FaClock, FaUserCircle, FaFingerprint } from 'react-icons/fa'
 import { lockService } from '@/services/lock.service'
 import { Lock, LockType } from '@/types/lock.types'
 import { User } from '@/types/api.types'

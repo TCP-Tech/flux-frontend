@@ -5,13 +5,13 @@
 
 import { api } from '../config/axios'
 import { API_ENDPOINTS } from '../config/env'
-import type { Contest, ContestRegistration, PaginatedResponse, QueryParams, ApiResponse } from '../types/api.types'
+import type { Contest, ContestRegistration, PaginatedResponse, QueryParams } from '../types/api.types'
 
 export const contestService = {
   /**
    * Get all contests with pagination and filters
    */
-  getContests: async (params?: QueryParams): Promise<ApiResponse<PaginatedResponse<Contest>>> => {
+  getContests: async (params?: QueryParams): Promise<PaginatedResponse<Contest>> => {
     return await api.get<PaginatedResponse<Contest>>(API_ENDPOINTS.CONTESTS.BASE, {
       params,
     })
@@ -20,14 +20,14 @@ export const contestService = {
   /**
    * Get contest by ID
    */
-  getContestById: async (id: string): Promise<ApiResponse<Contest>> => {
+  getContestById: async (id: string): Promise<Contest> => {
     return await api.get<Contest>(`${API_ENDPOINTS.CONTESTS.DETAIL}/${id}`)
   },
 
   /**
    * Register for a contest
    */
-  registerForContest: async (contestId: string): Promise<ApiResponse<ContestRegistration>> => {
+  registerForContest: async (contestId: string): Promise<ContestRegistration> => {
     return await api.post<ContestRegistration>(
       API_ENDPOINTS.CONTESTS.REGISTER,
       { contest_id: contestId }

@@ -5,13 +5,13 @@
 
 import { api } from '../config/axios'
 import { API_ENDPOINTS } from '../config/env'
-import type { Submission, PaginatedResponse, QueryParams, ApiResponse } from '../types/api.types'
+import type { Submission, PaginatedResponse, QueryParams } from '../types/api.types'
 
 export const submissionService = {
   /**
    * Get all submissions with pagination and filters
    */
-  getSubmissions: async (params?: QueryParams): Promise<ApiResponse<PaginatedResponse<Submission>>> => {
+  getSubmissions: async (params?: QueryParams): Promise<PaginatedResponse<Submission>> => {
     return await api.get<PaginatedResponse<Submission>>(API_ENDPOINTS.SUBMISSIONS.BASE, {
       params,
     })
@@ -20,14 +20,14 @@ export const submissionService = {
   /**
    * Get submission by ID
    */
-  getSubmissionById: async (id: string): Promise<ApiResponse<Submission>> => {
+  getSubmissionById: async (id: string): Promise<Submission> => {
     return await api.get<Submission>(API_ENDPOINTS.SUBMISSIONS.DETAIL(id))
   },
 
   /**
    * Get submission status (for polling)
    */
-  getSubmissionStatus: async (id: string): Promise<ApiResponse<Submission>> => {
+  getSubmissionStatus: async (id: string): Promise<Submission> => {
     return await api.get<Submission>(API_ENDPOINTS.SUBMISSIONS.STATUS(id))
   },
 }

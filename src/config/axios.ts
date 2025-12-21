@@ -6,7 +6,7 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { Cookies } from 'react-cookie'
 import { config, isDevelopment } from './env'
-import type { ApiError, ApiResponse } from '../types/api.types'
+import type { ApiError } from '../types/api.types'
 
 // Cookie instance for token management
 const cookies = new Cookies()
