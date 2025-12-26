@@ -13,7 +13,8 @@ export const userService = {
    */
   getUserProfile: async (userId: string): Promise<User> => {
     const response = await api.get<User>(API_ENDPOINTS.USERS.PROFILE(userId))
-    return response.data
+    // Fix: api.get already returns the data payload, so we return response directly
+    return response
   },
 
   /**
@@ -21,7 +22,8 @@ export const userService = {
    */
   updateProfile: async (userId: string, data: UpdateProfileRequest): Promise<User> => {
     const response = await api.patch<User>(API_ENDPOINTS.USERS.UPDATE_PROFILE(userId), data)
-    return response.data
+    // Fix: api.patch already returns the data payload
+    return response
   },
 
   /**
@@ -40,7 +42,7 @@ export const userService = {
         },
       }
     )
-    return response.data
+    return response
   },
 
   /**
@@ -59,4 +61,3 @@ export const userService = {
 }
 
 export default userService
-
