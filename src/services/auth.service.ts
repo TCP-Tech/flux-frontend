@@ -9,6 +9,7 @@ import { Cookies } from 'react-cookie'
 import type { LoginRequest, SignupRequest, AuthResponse, User, ApiResponse } from '../types/api.types'
 
 const cookies = new Cookies()
+const AUTH_KEY = 'flux_is_authenticated'
 
 /**
  * Authentication Service
@@ -20,10 +21,10 @@ export const authService = {
    */
   login: async (credentials: LoginRequest): Promise<AuthResponse> => {
     const response = await api.post<AuthResponse>(API_ENDPOINTS.AUTH.LOGIN, credentials)
-    
+    localStorage.setItem(AUTH_KEY, 'true')
     // Token is automatically set by backend in HTTP-only cookie
     // Just return the user data
-    return response.data
+    return response
   },
 
   /**
@@ -35,7 +36,7 @@ export const authService = {
       API_ENDPOINTS.AUTH.SIGNUP,
       userData
     )
-    return response.data
+    return response
   },
 
   /**
@@ -56,7 +57,10 @@ export const authService = {
       await api.post(API_ENDPOINTS.AUTH.LOGOUT)
     } finally {
       // Clear frontend cookie reference
+      localStorage.removeItem(AUTH_KEY)
       cookies.remove(COOKIE_NAMES.ACCESS_TOKEN, { path: '/' })
+      // Reload to clear application state
+      window.location.href = '/login'
     }
   },
 
@@ -65,7 +69,7 @@ export const authService = {
    */
   getCurrentUser: async (): Promise<User> => {
     const response = await api.get<User>(API_ENDPOINTS.AUTH.ME)
-    return response.data
+    return response
   },
 
   /**
@@ -97,7 +101,8 @@ export const authService = {
     // Check if the JWT cookie exists
     // In production with HTTP-only cookies, we can't read the cookie from JS
     // So this is a best-effort check
-    return !!cookies.get(COOKIE_NAMES.ACCESS_TOKEN) || document.cookie.includes(COOKIE_NAMES.ACCESS_TOKEN)
+   // return !!cookies.get(COOKIE_NAMES.ACCESS_TOKEN) || document.cookie.includes(COOKIE_NAMES.ACCESS_TOKEN)
+    return localStorage.getItem(AUTH_KEY) === 'true'
   },
 
   /**
