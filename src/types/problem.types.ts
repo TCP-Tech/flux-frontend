@@ -1,20 +1,23 @@
+// src/types/problem.types.ts
+
+// Enum for Evaluator
 export type EvaluatorType = 'codeforces' | 'custom'
 
+// --- 1. Problem Metadata ---
 export interface Problem {
-  id: number 
+  id: number
   title: string
   difficulty: number
   evaluator: EvaluatorType
-  lock_id?: string | null 
-  created_by: string 
+  lock_id?: string | null
+  created_by: string
   created_at: string
   updated_at: string
- //this we join from locks table 
   lock_access?: string 
   lock_timeout?: string
 }
 
-
+// --- 2. Problem Content ---
 export interface TestCase {
   input: string
   output: string
@@ -28,7 +31,7 @@ export interface ExampleTestCasesWrapper {
 
 export interface StandardProblemData {
   problem_id: number
-  statement: string 
+  statement: string
   input_format: string
   output_format: string
   notes?: string
@@ -38,15 +41,17 @@ export interface StandardProblemData {
   
   memory_limit_kb: number
   time_limit_ms: number
-  submission_link?: string 
+  // FIX: Allow null specifically for backend compatibility
+  submission_link?: string | null 
 }
 
+// --- 3. Unified View ---
 export interface FullProblem {
   problem: Problem
   problem_data: StandardProblemData
 }
 
-
+// --- 4. API Request DTOs ---
 export interface CreateProblemRequest {
   problem: {
     title: string
@@ -61,7 +66,8 @@ export interface CreateProblemRequest {
     notes?: string
     memory_limit_kb: number
     time_limit_ms: number
-    submission_link?: string
+    // FIX: Allow null
+    submission_link?: string | null
     function_definitions?: Record<string, string>
     example_test_cases?: ExampleTestCasesWrapper
   }

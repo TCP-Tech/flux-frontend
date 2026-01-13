@@ -1,0 +1,17 @@
+dist
+docs
+eslint.config.js
+index.html
+ls
+node_modules
+package.json
+package-lock.json
+postcss.config.js
+public
+README.md
+src
+tailwind.config.js
+tsconfig.json
+tsconfig.node.json
+vim
+vite.config.ts

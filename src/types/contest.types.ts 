@@ -1,0 +1,31 @@
+import { Problem } from './problem.types'
+
+export interface Contest {
+  contest_id: string // UUID
+  title: string
+  created_by: string
+  start_time: string | null
+  end_time: string
+  is_published: boolean
+  lock_id: string | null
+}
+
+export interface SelectedProblem {
+  meta: Problem // Keeps original metadata
+  customScore: number // The score assigned for THIS contest
+}
+
+export interface CreateContestRequest {
+  contest_details: {
+    title: string
+    start_time: string | null
+    end_time: string
+    is_published: boolean
+    lock_id: string | null
+  }
+  user_names: string[]
+  problems: {
+    problem_id: number
+    score: number
+  }[]
+}

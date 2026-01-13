@@ -32,7 +32,7 @@ function LoginPage() {
       await authService.login(loginRequest)
 
       // Success - redirect to home
-      navigate('/locks')
+      navigate('/contests')
     } catch (err) {
       setError(getErrorMessage(err))
     } finally {

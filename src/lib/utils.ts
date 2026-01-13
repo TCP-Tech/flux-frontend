@@ -73,3 +73,16 @@ export function truncate(text: string, length: number): string {
 export function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
+
+
+/**
+ * Converts a JS Date object into the string format required by
+ * <input type="datetime-local" />: "YYYY-MM-DDThh:mm"
+ * 
+ * Note: This keeps local time perception, which is what the user expects.
+ */
+export function toLocalISOString(date: Date): string {
+    const offset = date.getTimezoneOffset()
+    const adjustedDate = new Date(date.getTime() - (offset * 60 * 1000))
+    return adjustedDate.toISOString().slice(0, 16)
+}

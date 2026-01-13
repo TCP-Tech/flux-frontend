@@ -1,64 +1,71 @@
-/**
- * Contest API Service
- * Handles all contest-related API calls
- */
-
-import { api } from '../config/axios'
-import { API_ENDPOINTS } from '../config/env'
-import type { Contest, ContestRegistration, PaginatedResponse, QueryParams } from '../types/api.types'
+import { api } from '@/config/axios'
+import { API_ENDPOINTS } from '@/config/env'
+import { Contest, CreateContestRequest, SearchContestRequest, ContestProblemWrapper } from '@/types/contest.types'
 
 export const contestService = {
   /**
-   * Get all contests with pagination and filters
+   * Search Contests
    */
-  getContests: async (params?: QueryParams): Promise<PaginatedResponse<Contest>> => {
-    return await api.get<PaginatedResponse<Contest>>(API_ENDPOINTS.CONTESTS.BASE, {
-      params,
-    })
+  searchContests: async (filters: SearchContestRequest): Promise<Contest[]> => {
+    const response = await api.post<Contest[]>(API_ENDPOINTS.CONTESTS.SEARCH, filters)
+    return response || []
   },
 
   /**
-   * Get contest by ID
+   * Get specific contest details
    */
   getContestById: async (id: string): Promise<Contest> => {
-    return await api.get<Contest>(`${API_ENDPOINTS.CONTESTS.DETAIL}/${id}`)
+    return await api.get<Contest>(API_ENDPOINTS.CONTESTS.DETAIL, {
+       params: { contest_id: id } 
+    })
   },
 
   /**
-   * Register for a contest
+   * Get problems associated with a contest
    */
-  registerForContest: async (contestId: string): Promise<ContestRegistration> => {
-    return await api.post<ContestRegistration>(
-      API_ENDPOINTS.CONTESTS.REGISTER,
-      { contest_id: contestId }
-    )
-  },
-
-  /**
-   * Unregister from a contest
-   */
-  unregisterFromContest: async (contestId: string): Promise<void> => {
-    await api.delete(API_ENDPOINTS.CONTESTS.UNREGISTER, {
+  getContestProblems: async (contestId: string): Promise<ContestProblemWrapper[]> => {
+    return await api.get<ContestProblemWrapper[]>(API_ENDPOINTS.CONTESTS.PROBLEMS, {
       params: { contest_id: contestId }
     })
   },
 
   /**
-   * Get contest leaderboard
+   * Create a new contest
    */
-  getContestLeaderboard: async (contestId: string, params?: QueryParams) => {
-    return await api.get(API_ENDPOINTS.CONTESTS.LEADERBOARD(contestId), { params })
+  createContest: async (payload: CreateContestRequest): Promise<Contest> => {
+    return await api.post(API_ENDPOINTS.CONTESTS.BASE, payload)
   },
 
   /**
-   * Get contest problems
+   * Get IDs of contests the user is registered for
    */
-  getContestProblems: async (contestId: string) => {
-    return await api.get(API_ENDPOINTS.CONTESTS.PROBLEMS, {
-      params: { contest_id: contestId }
-    })
+  getMyRegisteredContestIds: async (): Promise<string[]> => {
+      // Return empty array if the endpoint returns null
+      const res = await api.get<any[]>(API_ENDPOINTS.CONTESTS.USER_REGISTERED, {
+        params: { page_number: 1, page_size: 1000 }
+      });
+      
+      // Handle both [ "uuid1", "uuid2" ] and [ {contest_id: "uuid1"}, ... ] formats
+      return res?.map((item: any) => typeof item === 'string' ? item : item.contest_id) || [];
   },
+
+  /**
+   * Register a specific user for a contest.
+   */
+  registerForContest: async (contestId: string, username: string): Promise<void> => {
+     await api.put(API_ENDPOINTS.CONTESTS.REGISTER, { 
+        contest_id: contestId,
+        user_names: [username] 
+     })
+  },
+
+  updateContest: async (payload: any): Promise<Contest> => {
+    return await api.put(API_ENDPOINTS.CONTESTS.BASE, payload)
+  },
+  
+  deleteContest: async (id: string): Promise<void> => {
+    return await api.delete(API_ENDPOINTS.CONTESTS.BASE, {
+        params: { contest_id: id }
+    })
+  }
 }
-
-export default contestService
-
