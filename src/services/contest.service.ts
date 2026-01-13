@@ -45,7 +45,6 @@ export const contestService = {
         params: { page_number: 1, page_size: 1000 }
       });
       
-      // Handle both [ "uuid1", "uuid2" ] and [ {contest_id: "uuid1"}, ... ] formats
       return res?.map((item: any) => typeof item === 'string' ? item : item.contest_id) || [];
   },
 

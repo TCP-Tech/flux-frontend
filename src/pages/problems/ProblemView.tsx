@@ -18,7 +18,6 @@ export default function ProblemView() {
 
   if (!state.problem) return null
 
-  // Auto-open terminal when running
   if ((state.status === 'SUBMITTING' || state.status === 'POLLING') && !termOpen) {
     setTermOpen(true)
   }
@@ -48,9 +47,7 @@ export default function ProblemView() {
           </div>
        </header>
 
-       {/* 2. Main Content */}
        <div className="flex-1 flex overflow-hidden">
-          {/* Problem Statement */}
           <div className="w-[40%] bg-neutral-900 border-r border-neutral-800 flex flex-col">
              <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
                 <div className="prose-invert">
@@ -71,7 +68,6 @@ export default function ProblemView() {
              </div>
           </div>
 
-          {/* Editor & Terminal */}
           <div className="flex-1 flex flex-col relative bg-[#1e1e1e]">
               <Editor 
                  height={termOpen ? "60%" : "96%"}
@@ -82,14 +78,12 @@ export default function ProblemView() {
                  options={{ fontSize: 13, minimap: { enabled: false }, automaticLayout: true }}
               />
 
-              {/* Bottom Sheet Terminal */}
               <div 
                 className={cn(
                     "absolute bottom-0 left-0 right-0 bg-[#161616] border-t border-[#333] transition-all duration-300 flex flex-col",
                     termOpen ? "h-[40%]" : "h-8"
                 )}
               >
-                  {/* Terminal Header */}
                   <div className="h-8 flex items-center justify-between px-4 cursor-pointer hover:bg-neutral-800/50" onClick={() => setTermOpen(!termOpen)}>
                      <div className="flex items-center gap-2 text-xs font-bold text-neutral-400">
                         <FaTerminal /> Console 
@@ -98,7 +92,6 @@ export default function ProblemView() {
                      {termOpen ? <FaChevronDown size={10} className="text-neutral-500" /> : <FaChevronUp size={10} className="text-neutral-500" />}
                   </div>
 
-                  {/* Terminal Body */}
                   <div className="flex-1 p-4 font-mono text-xs overflow-y-auto">
                       {state.verdict ? (
                          <div className="space-y-2">

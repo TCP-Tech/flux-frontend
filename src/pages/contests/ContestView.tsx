@@ -12,7 +12,6 @@ export default function ContestView() {
     return (
         <div className="min-h-screen bg-neutral-950 text-neutral-50 p-6 lg:p-12 font-sans selection:bg-amber-900 selection:text-white">
             
-            {/* HERO SECTION */}
             <div className="max-w-6xl mx-auto mb-12">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-neutral-800">
                     <div>
@@ -37,7 +36,6 @@ export default function ContestView() {
                         </p>
                     </div>
 
-                    {/* BIG TIMER */}
                     <div className="text-right">
                         <div className="font-mono text-4xl md:text-6xl font-bold tracking-tighter tabular-nums bg-gradient-to-b from-white to-neutral-500 bg-clip-text text-transparent">
                             {timerDisplay}
@@ -45,7 +43,6 @@ export default function ContestView() {
                     </div>
                 </div>
 
-                {/* ACTION BAR */}
                 {phase === 'LOBBY' && (
                     <div className="mt-8 bg-neutral-900/50 border border-neutral-800 p-8 rounded-2xl flex flex-col items-center text-center">
                          <div className="w-16 h-16 bg-neutral-800 rounded-full flex items-center justify-center mb-4">
@@ -74,7 +71,6 @@ export default function ContestView() {
                 )}
             </div>
 
-            {/* PROBLEM GRID */}
             {(phase === 'LIVE' || phase === 'ENDED') && (
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-8">
                     

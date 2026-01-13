@@ -1,6 +1,6 @@
 import { useReducer, useEffect, useRef } from 'react'
 import { problemService } from '@/services/problem.service'
-import { submissionService } from '@/services/submission.service' 
+// import { submissionService } from '@/services/submission.service' 
 import { FullProblem } from '@/types/problem.types'
 import { getErrorMessage } from '@/config/axios'
 
@@ -25,7 +25,7 @@ type Action =
   | { type: 'LOAD_SUCCESS'; payload: FullProblem }
   | { type: 'LOAD_ERROR'; payload: string }
   | { type: 'SUBMIT_START' }
-  | { type: 'SUBMIT_ACCEPTED'; payload: string } // sub_id
+  | { type: 'SUBMIT_ACCEPTED'; payload: string }
   | { type: 'SUBMIT_ERROR'; payload: string }
   | { type: 'POLL_UPDATE'; status: VerdictStatus; result?: string; logs?: string[] }
 
@@ -90,7 +90,8 @@ export function useProblemArena(id?: string) {
 
   const submit = async (code: string, language: string) => {
     if (!state.problem) return
-    
+    if(!code) console.error('no code submitted');
+    if(!language) console.error('could not determine language');
     dispatch({ type: 'SUBMIT_START' })
     try {
       // const res = await submissionService.submit({

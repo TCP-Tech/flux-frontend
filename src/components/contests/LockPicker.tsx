@@ -6,7 +6,6 @@ import { cn, formatDateTime } from '@/lib/utils'
 
 interface Props {
   selectedId: string | null
-  // CHANGE: Pass full object back
   onSelect: (lock: Lock | null) => void 
 }
 

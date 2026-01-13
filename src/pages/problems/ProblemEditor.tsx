@@ -10,7 +10,6 @@ export default function ProblemEditor() {
   const { state, isLoading, isSaving, canSave, actions } = useProblemEditorMachine(id)
   const [activeTab, setActiveTab] = useState<'write' | 'preview'>('write')
 
-  // --- Render Functions (Keeping JSX clean) ---
 
   if (state.status === 'BOOT' || isLoading) {
     return (
@@ -38,7 +37,6 @@ export default function ProblemEditor() {
   return (
     <div className="h-screen bg-neutral-950 text-neutral-50 flex flex-col overflow-hidden">
       
-      {/* 1. TOP BAR */}
       <header className="h-14 shrink-0 border-b border-neutral-800 bg-neutral-900/50 backdrop-blur flex items-center justify-between px-4 lg:px-6">
         <div className="flex items-center gap-4 flex-1">
           <button onClick={actions.goBack} className="p-2 hover:bg-neutral-800 rounded-lg text-neutral-400 hover:text-white transition-colors">
@@ -47,7 +45,6 @@ export default function ProblemEditor() {
           
           <div className="h-6 w-px bg-neutral-800 hidden sm:block" />
           
-          {/* Metadata Inputs in Header for space efficiency */}
           <div className="flex items-center gap-3 flex-1 max-w-2xl">
             <input 
               value={state.form.title}
@@ -105,10 +102,8 @@ export default function ProblemEditor() {
         </div>
       </header>
 
-      {/* 2. MAIN WORKSPACE */}
       <div className="flex-1 flex overflow-hidden">
         
-        {/* LEFT PANE: Content Editor */}
         <div className={cn(
           "flex-1 flex flex-col bg-[#141414]",
           activeTab === 'preview' && "hidden md:flex"
@@ -122,7 +117,6 @@ export default function ProblemEditor() {
            />
         </div>
 
-        {/* RIGHT PANE: Configuration & Preview */}
         <div className={cn(
           "w-full md:w-[500px] border-l border-neutral-800 bg-neutral-950 flex flex-col",
           activeTab === 'write' ? "hidden md:flex" : "flex"
@@ -137,7 +131,6 @@ export default function ProblemEditor() {
           ) : (
             <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
               
-              {/* Bot Config */}
               <div className="space-y-3">
                 <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider pl-1">
                    Bot & Judge Configuration
@@ -155,7 +148,6 @@ export default function ProblemEditor() {
                 </div>
               </div>
 
-              {/* Test Case Manager */}
               <div className="space-y-4">
                  <div className="flex items-center justify-between">
                     <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider pl-1">
@@ -205,7 +197,6 @@ export default function ProblemEditor() {
 
       </div>
 
-      {/* 3. FOOTER (Status) */}
       <footer className="h-8 border-t border-neutral-800 bg-neutral-950 flex items-center px-4 justify-between">
         <div className="text-[10px] text-neutral-600 flex items-center gap-2">
            <div className={cn("w-2 h-2 rounded-full", state.status === 'DIRTY' ? "bg-amber-500" : "bg-neutral-800")} />

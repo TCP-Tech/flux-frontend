@@ -7,7 +7,6 @@ import { lockService } from '@/services/lock.service'
 import { getErrorMessage } from '@/config/axios'
 import { toLocalISOString, sleep } from '@/lib/utils'
 
-// --- 1. States ---
 type Step = 'CONFIG' | 'PROBLEMS' | 'USERS' | 'REVIEW' | 'SUCCESS';
 
 interface WizardState {
@@ -19,7 +18,7 @@ interface WizardState {
   config: {
     title: string
     startTime: string // YYYY-MM-DDThh:mm
-    endTime: string   // YYYY-MM-DDThh:mm
+    endTime: string   
     lockId: string
     lockType?: 'timer' | 'manual'
     isPublished: boolean
@@ -29,7 +28,6 @@ interface WizardState {
   userNames: string[]
 }
 
-// --- 2. Actions ---
 type Action = 
   | { type: 'NEXT_STEP' }
   | { type: 'PREV_STEP' }
@@ -45,7 +43,6 @@ type Action =
   | { type: 'SUBMIT_FAIL'; error: string }
   | { type: 'SUBMIT_SUCCESS' }
 
-// Smart Defaults
 const now = new Date()
 const nextHour = new Date(now)
 nextHour.setHours(now.getHours() + 1, 0, 0, 0)
@@ -69,7 +66,6 @@ const INITIAL_STATE: WizardState = {
   userNames: []
 }
 
-// --- 3. Reducer ---
 function reducer(state: WizardState, action: Action): WizardState {
   switch(action.type) {
     case 'UPDATE_CONFIG':
@@ -92,12 +88,11 @@ function reducer(state: WizardState, action: Action): WizardState {
         let isTimer = state.config.isTimerBased
         const lockType = lock.lock_type === 'timer' ? 'timer' : 'manual'
 
-        // Smart Date Logic for Timer Locks
         if (lock.lock_type === 'timer' && lock.timeout) {
             isTimer = true
             const lockDate = new Date(lock.timeout)
             const paddedEnd = new Date(lockDate)
-            paddedEnd.setHours(lockDate.getHours() + 2) // +2h buffer
+            paddedEnd.setHours(lockDate.getHours() + 2) 
             newEndTime = toLocalISOString(paddedEnd)
         }
 
@@ -144,7 +139,6 @@ function reducer(state: WizardState, action: Action): WizardState {
             if (!state.config.title) return { ...state, error: "Title is required" }
             if (!state.config.endTime) return { ...state, error: "End time is required" }
             
-            // Allow manual start/end even without Timer/Public
             if (state.config.isTimerBased && !state.config.lockId) return { ...state, error: "Timer based contests require a Lock" }
             
             if (!state.config.isTimerBased && !state.config.isPublished) {
@@ -191,22 +185,17 @@ export function useContestWizard() {
     const submit = async () => {
         dispatch({ type: 'SUBMIT_START' })
         
-        // Preparation Vars
         let finalLockId = state.config.lockId
         let needsLockUpdatePostCreation = false
         const userStartTime = new Date(state.config.startTime)
         const isPublic = state.config.isPublished
         
         try {
-            // --- 0. AUTO-LOCK GENERATION ---
-            // If Public contest with manual start time (no lock selected), auto-create one.
             if (isPublic && !finalLockId) {
                 dispatch({ type: 'SUBMIT_UPDATE', message: 'Generating Access Lock...' })
                 
-                // Backend rule workaround: Lock must allow time > now.
-                // We create a temp "Timer" lock.
                 const safeDate = new Date()
-                safeDate.setHours(safeDate.getHours() + 26) // Safe margin for "1 Day" rule if still exists
+                safeDate.setHours(safeDate.getHours() + 26) 
                 
                 const newLock = await lockService.createLock({
                     name: `[Auto] ${state.config.title}`,
@@ -216,10 +205,9 @@ export function useContestWizard() {
                 })
                 
                 finalLockId = newLock.lock_id
-                needsLockUpdatePostCreation = true // We will fix the time later
+                needsLockUpdatePostCreation = true 
             }
 
-            // --- 1. PROBLEM LOCK SYNCHRONIZATION ---
             if (finalLockId) {
                 dispatch({ type: 'SUBMIT_UPDATE', message: 'Securing problem set...' })
                 
@@ -228,16 +216,12 @@ export function useContestWizard() {
                 if (problemsToUpdate.length > 0) {
                      const targetIsTimer = isPublic || state.config.isTimerBased
                      
-                     // BRIDGE STRATEGY:
-                     // Backend rejects: Unlocked -> Timer
-                     // We must do: Unlocked -> Manual -> Timer
                      if (targetIsTimer) {
                         const openProblems = problemsToUpdate.filter(p => !p.meta.lock_id)
                         
                         if (openProblems.length > 0) {
                             dispatch({ type: 'SUBMIT_UPDATE', message: 'Applying security bridge...' })
                             
-                            // 1. Create temporary manual lock
                             const bridgeLock = await lockService.createLock({
                                 name: `Bridge ${Date.now()}`,
                                 description: 'Temp transaction lock',
@@ -245,8 +229,6 @@ export function useContestWizard() {
                                 timeout: null
                             })
                             
-                            // 2. Lock OPEN problems with Bridge Lock (Backend allows NULL -> MANUAL)
-                            // IMPORTANT: Passing full metadata to avoid overwriting title with ""
                             await Promise.all(openProblems.map(p => 
                                 problemService.updateMetadata(p.meta.id, {
                                      title: p.meta.title,
@@ -256,33 +238,25 @@ export function useContestWizard() {
                                 })
                             ))
                             
-                            await sleep(200) // DB consistency wait
+                            await sleep(200) 
                         }
                      }
                      
-                     // Final Pass: Update ALL mismatching problems to Target Lock
                      dispatch({ type: 'SUBMIT_UPDATE', message: `Securing ${problemsToUpdate.length} problems...` })
                      
                      for (const p of problemsToUpdate) {
                          await problemService.updateMetadata(p.meta.id, {
-                             title: p.meta.title, // Keep title!
-                             difficulty: p.meta.difficulty, // Keep difficulty!
-                             evaluator: p.meta.evaluator, // Keep evaluator!
+                             title: p.meta.title, 
+                             difficulty: p.meta.difficulty, 
+                             evaluator: p.meta.evaluator, 
                              lock_id: finalLockId
                         })
                      }
                 }
             }
 
-            // --- 2. CREATE CONTEST ---
             dispatch({ type: 'SUBMIT_UPDATE', message: 'Creating contest...' })
 
-            // Backend rule: StartTime must be null if Lock is present? 
-            // Previous fix: Only if Timer-Based/Public.
-            // But we might want manual start + manual lock. 
-            // Adjusted logic: If "Timer Based" selected, use Null. Else use Time.
-            
-            // Update: If you relax Backend logic as discussed, we can just send Start Time always unless strict timer mode.
             const sendStartTime = (state.config.isTimerBased && finalLockId) ? null : userStartTime.toISOString()
 
             const payload: CreateContestRequest = {
@@ -302,8 +276,6 @@ export function useContestWizard() {
 
             await contestService.createContest(payload)
             
-            // --- 3. POST-CREATION ADJUSTMENT ---
-            // If we generated an auto-lock with fake time, reset it to real user start time
             if (needsLockUpdatePostCreation && finalLockId) {
                 dispatch({ type: 'SUBMIT_UPDATE', message: 'Adjusting schedule...' })
                 try {
@@ -312,7 +284,7 @@ export function useContestWizard() {
                         name: `[Auto] ${state.config.title}`,
                         description: `Timer for contest ${state.config.title}`,
                         lock_type: 'timer' as any,
-                        timeout: userStartTime.toISOString() // Set to real requested start time
+                        timeout: userStartTime.toISOString() 
                     })
                 } catch (updateErr) {
                     console.error("Warning: Failed to readjust start time", updateErr)

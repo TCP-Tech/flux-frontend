@@ -13,16 +13,12 @@ interface Props {
 }
 
 export default function CreateContestModal({ isOpen, onClose, onSuccess }: Props) {
-  // FIX: Added 'canProceed' to destructuring
   const { state, actions, canProceed } = useContestWizard()
-  
-  // Local Search state for problems
   const [problemSearch, setProblemSearch] = useState('')
   const [searchResults, setSearchResults] = useState<Problem[]>([])
   const [isSearching, setIsSearching] = useState(false)
   const [searchError, setSearchError] = useState<string | null>(null)
 
-  // Auto fetch logic for Step 2
   useEffect(() => {
     if (state.step === 'PROBLEMS') {
         const timeout = setTimeout(() => performSearch(), 100)
@@ -44,6 +40,7 @@ export default function CreateContestModal({ isOpen, onClose, onSuccess }: Props
          else setSearchResults(Object.values(res || {}))
      } catch (e) {
          setSearchError("Failed to load problems.")
+         console.error(e)
      } finally {
          setIsSearching(false)
      }
@@ -73,7 +70,6 @@ export default function CreateContestModal({ isOpen, onClose, onSuccess }: Props
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur p-4 animate-in fade-in duration-200">
       <div className="w-full max-w-4xl bg-neutral-950 border border-neutral-800 rounded-2xl flex flex-col h-[85vh] shadow-2xl">
         
-        {/* Header Steps */}
         <div className="p-6 border-b border-neutral-800 flex justify-between items-center bg-neutral-900/50">
             <div className="flex gap-4 items-center overflow-x-auto">
                 {['CONFIG', 'PROBLEMS', 'USERS', 'REVIEW'].map((s, idx) => (
@@ -95,7 +91,6 @@ export default function CreateContestModal({ isOpen, onClose, onSuccess }: Props
             <button onClick={onClose} className="text-neutral-500 hover:text-white p-2 hover:bg-neutral-800 rounded-full transition-all"><FaTimes /></button>
         </div>
 
-        {/* Content */}
         <div className="flex-1 overflow-y-auto p-8 custom-scrollbar relative bg-[#0a0a0a]">
             
             {state.error && (
@@ -104,7 +99,6 @@ export default function CreateContestModal({ isOpen, onClose, onSuccess }: Props
                 </div>
             )}
 
-            {/* STEP 1: CONFIG */}
             {state.step === 'CONFIG' && (
                 <div className="max-w-2xl mx-auto space-y-8 animate-in slide-in-from-right-4 fade-in duration-300">
                     <div>
@@ -116,9 +110,7 @@ export default function CreateContestModal({ isOpen, onClose, onSuccess }: Props
                         />
                     </div>
                     
-                    {/* Time Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-neutral-900/30 p-6 rounded-2xl border border-neutral-800">
-                         {/* Start Time */}
                          <div>
                              <div className="flex justify-between mb-3 items-center">
                                 <label className="block text-xs font-bold text-neutral-500 uppercase">Start Time</label>
@@ -142,13 +134,11 @@ export default function CreateContestModal({ isOpen, onClose, onSuccess }: Props
                                     type="datetime-local" 
                                     value={state.config.startTime} 
                                     onChange={e => actions.updateConfig('startTime', e.target.value)}
-                                    min={toLocalISOString(new Date())}
                                     className="w-full bg-neutral-950 border border-neutral-700 rounded-xl px-4 py-3 text-white text-sm focus:border-amber-500 outline-none [color-scheme:dark]"
                                 />
                              )}
                          </div>
 
-                         {/* End Time */}
                          <div>
                             <label className="block text-xs font-bold text-neutral-500 uppercase mb-3">End Time</label>
                             <input 
@@ -161,7 +151,6 @@ export default function CreateContestModal({ isOpen, onClose, onSuccess }: Props
                          </div>
                     </div>
 
-                    {/* Integrated Lock Picker */}
                     <div>
                         <div className="flex justify-between items-center mb-2 px-1">
                              <label className="block text-xs font-bold text-neutral-500 uppercase">Access Control <span className="font-normal normal-case opacity-50 ml-1">(Required for Public/Timer)</span></label>
@@ -202,10 +191,8 @@ export default function CreateContestModal({ isOpen, onClose, onSuccess }: Props
                             <input 
                                 type="checkbox" checked={state.config.isPublished} 
                                 onChange={e => {
-                                    // FORCE Timer mode visually if published
                                     const isPub = e.target.checked
                                     actions.updateConfig('isPublished', isPub)
-                                    // If becoming public and NOT timer based yet, force toggle
                                     if (isPub && !state.config.isTimerBased) {
                                         actions.toggleTimerMode()
                                     }
@@ -218,7 +205,7 @@ export default function CreateContestModal({ isOpen, onClose, onSuccess }: Props
                             <span className="text-sm font-bold text-white block group-hover:text-green-400 transition-colors">Publish immediately?</span>
                             <span className="text-xs text-neutral-500">
                                 {state.config.isPublished 
-                                    ? "Contest start time will be controlled by the Lock Expiry." 
+                                    ? "Contest start time will be controlled by the Lock Expiry (or Instant)." 
                                     : "Contest will be saved as Draft and hidden."}
                             </span>
                         </div>
@@ -226,7 +213,6 @@ export default function CreateContestModal({ isOpen, onClose, onSuccess }: Props
                 </div>
             )}
 
-            {/* STEP 2: PROBLEMS */}
             {state.step === 'PROBLEMS' && (
                 <div className="flex h-full gap-6 animate-in slide-in-from-right-4 fade-in duration-300">
                     <div className="w-1/2 flex flex-col border border-neutral-800 rounded-xl bg-neutral-900/20 overflow-hidden">
@@ -294,7 +280,6 @@ export default function CreateContestModal({ isOpen, onClose, onSuccess }: Props
                 </div>
             )}
 
-            {/* STEP 3: USERS */}
             {state.step === 'USERS' && (
                 <div className="max-w-xl mx-auto h-full flex flex-col animate-in slide-in-from-right-4 fade-in">
                     <label className="block text-xs font-bold text-neutral-500 uppercase mb-3 pl-1">Authorized Participants (CSV)</label>
@@ -313,7 +298,6 @@ export default function CreateContestModal({ isOpen, onClose, onSuccess }: Props
                 </div>
             )}
 
-            {/* STEP 4: REVIEW */}
             {state.step === 'REVIEW' && (
                 <div className="max-w-3xl mx-auto space-y-6 animate-in zoom-in-95 fade-in duration-300">
                     <div className="bg-neutral-900/50 border border-neutral-800 p-6 rounded-2xl">
@@ -364,7 +348,6 @@ export default function CreateContestModal({ isOpen, onClose, onSuccess }: Props
             )}
         </div>
 
-        {/* Footer Actions */}
         <div className="p-6 border-t border-neutral-800 bg-neutral-900/80 flex justify-between items-center">
             <button 
                 onClick={state.step === 'CONFIG' ? onClose : actions.back}

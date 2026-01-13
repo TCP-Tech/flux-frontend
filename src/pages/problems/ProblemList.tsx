@@ -15,7 +15,7 @@ const getDifficultyColor = (diff: number) => {
 }
 
 export default function ProblemList() {
-  const [page, setPage] = useState(1) // Used in Pagination
+  const [page, setPage] = useState(1) 
   const [search, setSearch] = useState('')
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const navigate = useNavigate()
@@ -51,7 +51,7 @@ export default function ProblemList() {
           <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500 group-focus-within:text-white transition-colors" />
           <input
             value={search}
-            onChange={(e) => { setSearch(e.target.value); setPage(1); }} // Reset page on search
+            onChange={(e) => { setSearch(e.target.value); setPage(1); }} 
             placeholder="Search problems by title..."
             className="w-full bg-neutral-900 border border-neutral-800 rounded-xl py-3.5 pl-12 pr-4 text-neutral-200 focus:outline-none focus:border-primary-500/50 transition-all placeholder-neutral-600"
           />
@@ -159,7 +159,7 @@ export default function ProblemList() {
       <CreateProblemModal 
         isOpen={isCreateOpen} 
         onClose={() => setIsCreateOpen(false)}
-        onSuccess={() => refetch()} // Refresh list on create
+        onSuccess={() => refetch()} 
       />
     </div>
   )
